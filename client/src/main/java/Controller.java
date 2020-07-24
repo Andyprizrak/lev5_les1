@@ -10,6 +10,9 @@ import javafx.scene.control.TextField;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.BufferedInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.Socket;
@@ -74,6 +77,22 @@ public class Controller implements Initializable {
                         }
                     }
                 }
+
+                if (a.getClickCount() == 1) {
+                    String fileName = listView.getSelectionModel().getSelectedItem();
+                    File currentFile = findFileByName(fileName);
+                    try (BufferedInputStream inser = new BufferedInputStream(new URL(currentFile).openStream());
+                         FileOutputStream fileOutputStream new FileOutputStream(currentFile)) {
+                        byte dataBuffer[]= new byte[1024];
+                        int bytesRead;
+                        while ((bytesRead = inser.read(dataBuffer, 0, 1024)) != -1) {
+                            fileOutputStream.write(dataBuffer, 0, bytesRead);
+                        }
+                    } catch (IOException e) {
+
+                    }
+                }
+
 
             });
         } catch (Exception e) {
